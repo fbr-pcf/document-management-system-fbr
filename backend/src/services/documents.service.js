@@ -1,34 +1,34 @@
+const { toPublicDocument } = require('./documents.mapper');
+
 class DocumentsService {
   constructor(repository) {
     this.repository = repository;
   }
 
-  upload(file, owner) {
+  upload(file, ownerId) {
     if (!file) {
       const error = new Error('Arquivo é obrigatório.');
       error.statusCode = 400;
       throw error;
     }
 
-    return this.toPublicDocument(
+    return toPublicDocument(
       this.repository.create({
         originalName: file.originalname,
         size: file.size,
         mimetype: file.mimetype,
-        owner,
+        ownerId,
         storedFilename: file.filename
       })
     );
   }
 
-  list() {
-    return this.repository.findAll().map((document) =>
-      this.toPublicDocument(document)
-    );
+  list(ownerId) {
+    return this.repository.findAll(ownerId).map(toPublicDocument);
   }
 
-  getDownload(id) {
-    const document = this.repository.findById(id);
+  getDownload(id, ownerId) {
+    const document = this.repository.findByIdForOwner(id, ownerId);
 
     if (!document) {
       const error = new Error('Documento não encontrado.');
@@ -37,11 +37,6 @@ class DocumentsService {
     }
 
     return document;
-  }
-
-  toPublicDocument(document) {
-    const { storedFilename, filePath, ...publicDocument } = document;
-    return publicDocument;
   }
 }
 

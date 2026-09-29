@@ -11,13 +11,19 @@
 // usando multer com diskStorage. Não utilize provedores externos.
 
 const express = require('express');
-const documentsRoutes = require('./routes/documents.routes');
+const DocumentsController = require('./controllers/documents.controller');
+const authRoutes = require('./routes/auth.routes');
+const { createDocumentsRouter } = require('./routes/documents.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(documentsRoutes);
+app.use('/auth', authRoutes.router);
+app.use(createDocumentsRouter({
+  authenticate: authRoutes.authenticate,
+  DocumentsController
+}));
 
 // Endpoint de verificação de saúde.
 app.get('/health', (req, res) => {

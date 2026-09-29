@@ -10,14 +10,14 @@ class DocumentsRepository {
     this.documents = new Map();
   }
 
-  create({ originalName, size, mimetype, owner, storedFilename }) {
+  create({ originalName, size, mimetype, ownerId, storedFilename }) {
     const document = {
       id: crypto.randomUUID(),
       originalName,
       size,
       mimetype,
       uploadedAt: new Date().toISOString(),
-      owner,
+      ownerId,
       storedFilename,
       filePath: path.join(storageDirectory, storedFilename)
     };
@@ -26,14 +26,17 @@ class DocumentsRepository {
     return document;
   }
 
-  findAll() {
-    return [...this.documents.values()].sort((first, second) =>
+  findAll(ownerId) {
+    return [...this.documents.values()]
+      .filter((document) => document.ownerId === ownerId)
+      .sort((first, second) =>
       second.uploadedAt.localeCompare(first.uploadedAt)
-    );
+      );
   }
 
-  findById(id) {
-    return this.documents.get(id);
+  findByIdForOwner(id, ownerId) {
+    const document = this.documents.get(id);
+    return document?.ownerId === ownerId ? document : undefined;
   }
 }
 

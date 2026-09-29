@@ -20,6 +20,10 @@ button, input { font: inherit; }
 }
 
 .app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
   padding: 28px clamp(24px, 6vw, 88px);
   border-bottom: 1px solid rgba(24, 33, 31, 0.12);
 }
@@ -34,6 +38,14 @@ button, input { font: inherit; }
 }
 
 .brand-mark { margin: 0; }
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #596762;
+  font-size: 0.9rem;
+}
 
 .main-content {
   display: grid;
@@ -70,6 +82,31 @@ button, input { font: inherit; }
 
 .upload-panel { display: grid; gap: 24px; }
 
+.auth-panel {
+  display: grid;
+  gap: 18px;
+  max-width: 460px;
+  border-top: 3px solid #18211f;
+  background: rgba(255, 255, 255, 0.58);
+  padding: 28px;
+}
+
+.auth-panel label {
+  display: grid;
+  gap: 8px;
+  color: #596762;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.auth-panel input {
+  min-height: 42px;
+  border: 1px solid #a9b5ae;
+  padding: 8px 12px;
+  color: #18211f;
+  background: #fff;
+}
+
 .eyebrow { margin: 0 0 8px; }
 
 h2 { margin: 0; font-size: 1.45rem; }
@@ -101,6 +138,16 @@ h2 { margin: 0; font-size: 1.45rem; }
 .primary-button, .download-button { color: #fff; background: #c45732; }
 
 .secondary-button { color: #18211f; background: #d8e4da; }
+
+.text-button {
+  width: fit-content;
+  border: 0;
+  padding: 0;
+  color: #a84729;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 700;
+}
 
 .primary-button:disabled { cursor: wait; opacity: 0.6; }
 

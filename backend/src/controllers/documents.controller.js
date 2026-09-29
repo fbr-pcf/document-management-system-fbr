@@ -8,8 +8,7 @@ class DocumentsController {
 
   upload(req, res, next) {
     try {
-      const owner = process.env.DEFAULT_OWNER || 'local-user';
-      const document = this.service.upload(req.file, owner);
+      const document = this.service.upload(req.file, req.user.id);
       res.status(201).json({ document });
     } catch (error) {
       next(error);
@@ -18,7 +17,7 @@ class DocumentsController {
 
   list(req, res, next) {
     try {
-      res.json({ documents: this.service.list() });
+      res.json({ documents: this.service.list(req.user.id) });
     } catch (error) {
       next(error);
     }
@@ -26,7 +25,7 @@ class DocumentsController {
 
   download(req, res, next) {
     try {
-      const document = this.service.getDownload(req.params.id);
+      const document = this.service.getDownload(req.params.id, req.user.id);
       res.download(document.filePath, document.originalName, (error) => {
         if (error && !res.headersSent) {
           next(error);

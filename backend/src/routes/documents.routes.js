@@ -3,7 +3,6 @@ const fs = require('node:fs');
 const path = require('node:path');
 const multer = require('multer');
 
-const DocumentsController = require('../controllers/documents.controller');
 const DocumentsRepository = require('../repositories/documents.repository');
 const DocumentsService = require('../services/documents.service');
 
@@ -27,13 +26,17 @@ const upload = multer({
   }
 });
 
-const repository = new DocumentsRepository();
-const service = new DocumentsService(repository);
-const controller = new DocumentsController(service);
-const router = require('express').Router();
+function createDocumentsRouter({ authenticate, DocumentsController }) {
+  const repository = new DocumentsRepository();
+  const service = new DocumentsService(repository);
+  const controller = new DocumentsController(service);
+  const router = require('express').Router();
 
-router.post('/upload', upload.single('file'), controller.upload);
-router.get('/documents', controller.list);
-router.get('/documents/:id/download', controller.download);
+  router.post('/upload', authenticate, upload.single('file'), controller.upload);
+  router.get('/documents', authenticate, controller.list);
+  router.get('/documents/:id/download', authenticate, controller.download);
 
-module.exports = router;
+  return router;
+}
+
+module.exports = { createDocumentsRouter };
