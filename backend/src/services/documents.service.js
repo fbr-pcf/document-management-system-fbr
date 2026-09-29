@@ -1,3 +1,5 @@
+const { toPublicDocument } = require('./documents.mapper');
+
 class DocumentsService {
   constructor(repository) {
     this.repository = repository;
@@ -10,7 +12,7 @@ class DocumentsService {
       throw error;
     }
 
-    return this.toPublicDocument(
+    return toPublicDocument(
       this.repository.create({
         originalName: file.originalname,
         size: file.size,
@@ -22,9 +24,7 @@ class DocumentsService {
   }
 
   list() {
-    return this.repository.findAll().map((document) =>
-      this.toPublicDocument(document)
-    );
+    return this.repository.findAll().map(toPublicDocument);
   }
 
   getDownload(id) {
@@ -37,11 +37,6 @@ class DocumentsService {
     }
 
     return document;
-  }
-
-  toPublicDocument(document) {
-    const { storedFilename, filePath, ...publicDocument } = document;
-    return publicDocument;
   }
 }
 
